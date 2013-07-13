@@ -27,7 +27,7 @@ class m130526_162344_add_roles extends CDbMigration
             case "mysql":
                 // AuthItem
                 Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('user')->tableAuthItem)->execute();
-                $this->createTable(Yii::app()->getModule('user')->tableAuthItem, array(
+                $this->createTable(Yii::app()->getModule('role')->tableAuthItem, array(
                     "name"=>"varchar(64) NOT NULL",
                     "type"=>"integer NOT NULL",
                     "description"=>"text",
