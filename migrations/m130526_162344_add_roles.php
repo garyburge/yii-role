@@ -104,10 +104,10 @@ class m130526_162344_add_roles extends CDbMigration
         $this->_user = new User;
 
         if (in_array('--interactive=0', $_SERVER['argv'])) {
-          $this->_authItem->name = 'admin';
+          $this->_authItem->name = 'administrator';
           $this->_adminUsername = 'administrator';
         } else {
-          $this->readStdinAuthItem('Name of administrator role', 'name', 'admin');
+          $this->readStdinAuthItem('Name of administrator role', 'name', 'administrator');
           $this->readStdinAdminUserId("Default administrator's username", 'administrator');
         }
 
@@ -122,14 +122,14 @@ class m130526_162344_add_roles extends CDbMigration
         $this->insert(Yii::app()->getModule('role')->tableAuthItem, array(
             'name'=>$this->_authItem->name,
             'type'=>CAuthItem::TYPE_ROLE,
-            'description'=>null,
+            'description'=>'Administrators may do anything',
             'bizrule'=>null,
         ));
 
         // assign to administrator
 //        $authManager = new CDbAuthManager;
 //        $authManager->assign($this->_authItem->name, $this->_adminUserId);
-        Yii::app()->authManager->assign($this->_authItem->name, $this->_adminUserId);
+        Yii::app()->authManager->assign($this->_authItem->name, $this->_adminUserId, null, null);
 
     }
 
