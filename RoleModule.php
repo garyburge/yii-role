@@ -10,10 +10,26 @@
  */
 class RoleModule extends CWebModule
 {
-
+    /**
+     * auth assignment table name
+     * @var string $tableAuthAssignment
+     */
     public $tableAuthAssignment = '{{AuthAssignment}}';
+    /**
+     * auth item table name
+     * @var string $tableAuthItem
+     */
     public $tableAuthItem = '{{AuthItem}}';
+    /**
+     * auth item to child table name
+     * @var string $tableAuthItemChild
+     */
     public $tableAuthItemChild = '{{AuthItemChild}}';
+    /**
+     * roles
+     * @var array array of role names assigned to this user
+     */
+    protected static $_roles;
 
     public function init()
     {
@@ -23,6 +39,30 @@ class RoleModule extends CWebModule
         $this->setImport(array(
             'role.models.*',
         ));
+    }
+
+    /**
+     * has role
+     * @param string $itemname is the itemname of the role assigned to this user
+     * @return boolean true if 'itemname' is assigned to this user
+     */
+    public function hasRole($itemname)
+    {
+        if (!self::$_roles) {
+            $sql = "SELECT itemname FROM ".self::tableAuthAssignment." ".
+                   "WHERE userid = :userid ".
+                   "ORDER by itemname ";
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':userid'=>Yii::app()->user->id));
+            if (null !== $rows) {
+                // unwrap into single dimension array
+                self::_$roles = array();
+                foreach ($rows => $row) {
+                    self::$roles[] = $row['itemname'];
+                }
+            }
+        }
+
+        return (!self::$_roles ? false : in_array($itemname, self::$_roles));
     }
 
     /**
