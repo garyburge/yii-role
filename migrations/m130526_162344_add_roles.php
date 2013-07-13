@@ -127,7 +127,7 @@ class m130526_162344_add_roles extends CDbMigration
         ));
 
         // assign to administrator
-        CDbAuthAssignment::assign($this->_authItem->name, $this->_adminUserId);
+        CDbAuthManager::assign($this->_authItem->name, $this->_adminUserId);
 
     }
 
