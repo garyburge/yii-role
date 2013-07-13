@@ -50,13 +50,14 @@ class m130526_162344_add_roles extends CDbMigration
                 Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('role')->tableAuthAssignment)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthAssignment, array(
                     "itemname"=>"varchar(64) NOT NULL",
-                    "roleid"=>"integer(11) NOT NULL", //"varchar(64) NOT NULL",
+                    "userid"=>"integer(11) NOT NULL",
                     "bizrule"=>"text",
                     "data"=>"text",
                 ), $this->MySqlOptions);
                 $this->createIndex('itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', false);
-                $this->createIndex('roleid', Yii::app()->getModule('role')->tableAuthAssignment, 'roleid', false);
+                $this->createIndex('userid', Yii::app()->getModule('role')->tableAuthAssignment, 'userid', false);
                 $this->addForeignKey('itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
+                $this->addForeignKey('user', Yii::app()->getModule('role')->tableAuthAssignment, 'userid', Yii::app()->getModule('user')->tableUsers, 'id', 'CASCADE', 'RESTRICT');
                 break;
 
             case "sqlite":
