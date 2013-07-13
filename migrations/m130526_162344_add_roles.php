@@ -12,7 +12,7 @@ class m130526_162344_add_roles extends CDbMigration
             echo "\n\nAdd to console.php :\n"
             . "'modules'=>array(\n"
             . "...\n"
-            . "    'user'=>array(\n"
+            . "    'role'=>array(\n"
             . "        ... # copy settings from main config\n"
             . "    ),\n"
             . "...\n"
