@@ -1,5 +1,6 @@
 <?php
-
+ii::import('user.models.*);
+    
 class AdminController extends Controller
 {
 
