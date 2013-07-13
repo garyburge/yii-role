@@ -57,11 +57,6 @@ class m130526_162344_add_roles extends CDbMigration
                 $this->createIndex('itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', false);
                 $this->createIndex('roleid', Yii::app()->getModule('role')->tableAuthAssignment, 'roleid', false);
                 $this->addForeignKey('itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
-                $this->addForeignKey('roleid', Yii::app()->getModule('role')->tableAuthAssignment, 'roleid', Yii::app()->getModule('role')->tableRoles, 'id', 'NO ACTION', 'NO ACTION');
-
-                // relate role to AuthAssignment
-                //$this->addForeignKey('id', Yii::app()->getModule('role')->tableRoles, 'id', Yii::app()->getModule('role')->tableAuthAssignment, 'roleid', 'NO ACTION', 'NO ACTION');
-
                 break;
 
             case "sqlite":
