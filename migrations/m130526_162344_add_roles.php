@@ -4,7 +4,11 @@ class m130526_162344_add_roles extends CDbMigration
 {
 
     protected $MySqlOptions = 'ENGINE=InnoDB CHARSET=utf8';
-    private $_model;
+    private $_authItem;
+    private $_adminUsername;
+    private $_adminUserId;
+    private $_user;
+    private $_authAssignment;
 
     public function safeUp()
     {
@@ -20,13 +24,12 @@ class m130526_162344_add_roles extends CDbMigration
             . "\n";
             return false;
         }
-        Yii::import('role.models.Role');
 
         // create auth tables
         switch ($this->dbType()) {
             case "mysql":
                 // AuthItem
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('role')->tableAuthItem)->execute();
+                Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthItem)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthItem, array(
                     "name"=>"varchar(64) NOT NULL",
                     "type"=>"integer NOT NULL",
@@ -37,7 +40,7 @@ class m130526_162344_add_roles extends CDbMigration
                 $this->createIndex('name', Yii::app()->getModule('role')->tableAuthItem, 'name', true);
 
                 // AuthItemChild
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('role')->tableAuthItemChild)->execute();
+                Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthItemChild)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthItemChild, array(
                     'parent'=>'varchar(64) NOT NULL',
                     'child'=>'varchar(64) NOT NULL',
@@ -47,7 +50,7 @@ class m130526_162344_add_roles extends CDbMigration
                 $this->addForeignKey('child', Yii::app()->getModule('role')->tableAuthItemChild, 'child', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
 
                 // AuthAssignment
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('role')->tableAuthAssignment)->execute();
+                Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthAssignment)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthAssignment, array(
                     "itemname"=>"varchar(64) NOT NULL",
                     "userid"=>"integer(11) NOT NULL",
@@ -82,13 +85,50 @@ class m130526_162344_add_roles extends CDbMigration
                 // AuthAssignment
                 $this->createTable(Yii::app()->getModule('role')->tableAuthAssignment, array(
                     "itemname"=>"varchar(64) NOT NULL",
-                    "roleid"=>"varchar(64) NOT NULL",
+                    "userid"=>"varchar(64) NOT NULL",
                     "bizrule"=>"text",
                     "data"=>"text",
                 ), $this->MySqlOptions);
 
                 break;
         }
+
+        // create models
+        Yii::import('role.models.Role');
+        Yii::import('role.models.AuthItem');
+        Yii::import('role.models.AuthAssignment');
+        Yii::import('user.models.User');
+
+        $this->_authItem = new AuthItem;
+        $this->_authAssignment = new AuthAssignment;
+        $this->_user = new User;
+
+        if (in_array('--interactive=0', $_SERVER['argv'])) {
+          $this->_authItem->name = 'admin';
+          $this->_adminUsername = 'administrator';
+        } else {
+          $this->readStdinAuthItem('Name of administrator role', 'name', 'admin');
+          $this->readStdinAdminUserId("Default administrator's username", 'administrator');
+        }
+
+        // get user id of administrator
+        if (null === ($row = $this->_user->find('username = :username', array(':username', $this->_adminUsername)))) {
+            echo "\n\nError: Unable to locate any user with username = '".$this->_adminUsername."'";
+            return false;
+        }
+        $this->_adminUserId = $row['id'];
+
+        // create AuthItem row
+        $this->insert(Yii::app()->getModule('role')->tableAuthItem, array(
+            'name'=>$this->_authItem->name,
+            'type'=>CAuthItem::TYPE_ROLE,
+            'description'=>null,
+            'bizrule'=>null,
+        ));
+
+        // assign to administrator
+        IAuthManager::assign($this->_authItem->name, $this->_adminUserId);
+
     }
 
     public function safeDown()
@@ -103,6 +143,44 @@ class m130526_162344_add_roles extends CDbMigration
         list($type) = explode(':', Yii::app()->db->connectionString);
         echo "type db: " . $type . "\n";
         return $type;
+    }
+
+    private function readStdin($prompt, $valid_inputs, $default = '')
+    {
+        while (!isset($input) || (is_array($valid_inputs) && !in_array($input, $valid_inputs)) || ($valid_inputs == 'is_file' && !is_file($input))) {
+            echo $prompt;
+            $input = strtolower(trim(fgets(STDIN)));
+            if (empty($input) && !empty($default)) {
+                $input = $default;
+            }
+        }
+        return $input;
+    }
+
+    private function readStdinAuthItem($prompt, $field, $default = '')
+    {
+        while (!isset($input) || !$this->_authItem->validate(array($field))) {
+            echo $prompt . (($default) ? " [$default]" : '') . ': ';
+            $input = (trim(fgets(STDIN)));
+            if (empty($input) && !empty($default)) {
+                $input = $default;
+            }
+            $this->_authItem->setAttribute($field, $input);
+        }
+        return $input;
+    }
+
+    private function readStdinAdminUserId($prompt, $default = '')
+    {
+        while (!isset($input)) {
+            echo $prompt . (($default) ? " [$default]" : '') . ': ';
+            $input = (trim(fgets(STDIN)));
+            if (empty($input) && !empty($default)) {
+                $input = $default;
+            }
+            $this->_adminUsername = $input;
+        }
+        return $input;
     }
 
 }
