@@ -24,7 +24,7 @@ class RoleController extends Controller
             array('allow', // administrator access
                 'actions'   =>array('index', 'create', 'update', 'delete'),
                 //'roles'=>array('admin'),
-                'users'=>Yii::app()->getModules('user')->getAdmins(),
+                'users'=>Yii::app()->getModule('user')->getAdmins(),
             ),
             array('deny', // deny all users
                 'users'=>array('*'),
