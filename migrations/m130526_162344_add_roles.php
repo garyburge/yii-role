@@ -127,8 +127,9 @@ class m130526_162344_add_roles extends CDbMigration
         ));
 
         // assign to administrator
-        $authManager = new CDbAuthManager;
-        $authManager->assign($this->_authItem->name, $this->_adminUserId);
+//        $authManager = new CDbAuthManager;
+//        $authManager->assign($this->_authItem->name, $this->_adminUserId);
+        Yii::app()->authManager->assign($this->_authItem->name, $this->_adminUserId);
 
     }
 
