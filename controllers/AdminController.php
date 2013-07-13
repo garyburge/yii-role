@@ -1,5 +1,6 @@
 <?php
-Yii::import('user.models.*);
+
+Yii::import('user.models.*');
 
 class AdminController extends Controller
 {
