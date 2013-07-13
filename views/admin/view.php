@@ -35,11 +35,11 @@
   }
 
   array_push($attributes, array(
-    'name'=>'created',
+    'name'=>'create_at',
     'type'=>'date',
   ));
   array_push($attributes, array(
-    'name'=>'lastvisit',
+    'name'=>'lastvisit_at',
     'type'=>'datetime',
   ));
 

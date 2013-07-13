@@ -11,8 +11,8 @@
   <?php echo $form->textFieldRow($model, 'username', array('maxlength'=>20)); ?>
   <?php echo $form->textFieldRow($model, 'email', array('class'=>'span4', 'maxlength'=>128)); ?>
   <?php echo $form->textFieldRow($model, 'active_key', array('class'=>'span5', 'maxlength'=>128)); ?>
-  <?php echo $form->textFieldRow($model, 'created'); ?>
-  <?php echo $form->textFieldRow($model, 'lastvisit'); ?>
+  <?php echo $form->textFieldRow($model, 'create_at'); ?>
+  <?php echo $form->textFieldRow($model, 'lastvisit_at'); ?>
   <?php echo $form->dropDownListRow($model, 'superuser', $model->itemAlias('AdminStatus')); ?>
   <?php echo $form->dropDownListRow($model, 'status', $model->itemAlias('UserStatus')); ?>
 
