@@ -8,7 +8,7 @@ class m130526_162344_add_roles extends CDbMigration
 
     public function safeUp()
     {
-        if (!Yii::app()->getModule('user')) {
+        if (!Yii::app()->getModule('role')) {
             echo "\n\nAdd to console.php :\n"
             . "'modules'=>array(\n"
             . "...\n"
@@ -20,13 +20,13 @@ class m130526_162344_add_roles extends CDbMigration
             . "\n";
             return false;
         }
-        Yii::import('user.models.User');
+        Yii::import('role.models.Role');
 
         // create auth tables
         switch ($this->dbType()) {
             case "mysql":
                 // AuthItem
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('user')->tableAuthItem)->execute();
+                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('role')->tableAuthItem)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthItem, array(
                     "name"=>"varchar(64) NOT NULL",
                     "type"=>"integer NOT NULL",
@@ -34,59 +34,59 @@ class m130526_162344_add_roles extends CDbMigration
                     "bizrule"=>"text",
                     "data"=>"text",
                 ), $this->MySqlOptions);
-                $this->createIndex('name', Yii::app()->getModule('user')->tableAuthItem, 'name', true);
+                $this->createIndex('name', Yii::app()->getModule('role')->tableAuthItem, 'name', true);
 
                 // AuthItemChild
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('user')->tableAuthItemChild)->execute();
-                $this->createTable(Yii::app()->getModule('user')->tableAuthItemChild, array(
+                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('role')->tableAuthItemChild)->execute();
+                $this->createTable(Yii::app()->getModule('role')->tableAuthItemChild, array(
                     'parent'=>'varchar(64) NOT NULL',
                     'child'=>'varchar(64) NOT NULL',
                 ), $this->MySqlOptions);
-                $this->createIndex('parent_child', Yii::app()->getModule('user')->tableAuthItemChild, 'parent,child', true);
-                $this->addForeignKey('parent', Yii::app()->getModule('user')->tableAuthItemChild, 'parent', Yii::app()->getModule('user')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
-                $this->addForeignKey('child', Yii::app()->getModule('user')->tableAuthItemChild, 'child', Yii::app()->getModule('user')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
+                $this->createIndex('parent_child', Yii::app()->getModule('role')->tableAuthItemChild, 'parent,child', true);
+                $this->addForeignKey('parent', Yii::app()->getModule('role')->tableAuthItemChild, 'parent', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
+                $this->addForeignKey('child', Yii::app()->getModule('role')->tableAuthItemChild, 'child', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
 
                 // AuthAssignment
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('user')->tableAuthAssignment)->execute();
-                $this->createTable(Yii::app()->getModule('user')->tableAuthAssignment, array(
+                Yii::app()->db->createCommand("DROP TABLE IF EXISTS ".Yii::app()->getModule('role')->tableAuthAssignment)->execute();
+                $this->createTable(Yii::app()->getModule('role')->tableAuthAssignment, array(
                     "itemname"=>"varchar(64) NOT NULL",
-                    "userid"=>"integer(11) NOT NULL", //"varchar(64) NOT NULL",
+                    "roleid"=>"integer(11) NOT NULL", //"varchar(64) NOT NULL",
                     "bizrule"=>"text",
                     "data"=>"text",
                 ), $this->MySqlOptions);
-                $this->createIndex('itemname', Yii::app()->getModule('user')->tableAuthAssignment, 'itemname', false);
-                $this->createIndex('userid', Yii::app()->getModule('user')->tableAuthAssignment, 'userid', false);
-                $this->addForeignKey('itemname', Yii::app()->getModule('user')->tableAuthAssignment, 'itemname', Yii::app()->getModule('user')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
-                $this->addForeignKey('userid', Yii::app()->getModule('user')->tableAuthAssignment, 'userid', Yii::app()->getModule('user')->tableUsers, 'id', 'NO ACTION', 'NO ACTION');
+                $this->createIndex('itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', false);
+                $this->createIndex('roleid', Yii::app()->getModule('role')->tableAuthAssignment, 'roleid', false);
+                $this->addForeignKey('itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'RESTRICT');
+                $this->addForeignKey('roleid', Yii::app()->getModule('role')->tableAuthAssignment, 'roleid', Yii::app()->getModule('role')->tableRoles, 'id', 'NO ACTION', 'NO ACTION');
 
-                // relate user to AuthAssignment
-                //$this->addForeignKey('id', Yii::app()->getModule('user')->tableUsers, 'id', Yii::app()->getModule('user')->tableAuthAssignment, 'userid', 'NO ACTION', 'NO ACTION');
+                // relate role to AuthAssignment
+                //$this->addForeignKey('id', Yii::app()->getModule('role')->tableRoles, 'id', Yii::app()->getModule('role')->tableAuthAssignment, 'roleid', 'NO ACTION', 'NO ACTION');
 
                 break;
 
             case "sqlite":
             default:
                 // AuthItem
-                $this->createTable(Yii::app()->getModule('user')->tableAuthItem, array(
+                $this->createTable(Yii::app()->getModule('role')->tableAuthItem, array(
                     "name"=>"varchar(64) NOT NULL",
                     "type"=>"integer NOT NULL",
                     "description"=>"text",
                     "bizrule"=>"text",
                     "data"=>"text",
                 ), $this->MySqlOptions);
-                $this->createIndex('name', Yii::app()->getModule('user')->tableAuthItem, 'name', true);
+                $this->createIndex('name', Yii::app()->getModule('role')->tableAuthItem, 'name', true);
 
                 // AuthItemChild
-                $this->createTable(Yii::app()->getModule('user')->tableAuthItemChild, array(
+                $this->createTable(Yii::app()->getModule('role')->tableAuthItemChild, array(
                     'parent'=>'varchar(64) NOT NULL',
                     'child'=>'varchar(64) NOT NULL',
                 ), $this->MySqlOptions);
-                $this->createIndex('parent_child', Yii::app()->getModule('user')->tableAuthItemChild, 'parent,child', true);
+                $this->createIndex('parent_child', Yii::app()->getModule('role')->tableAuthItemChild, 'parent,child', true);
 
                 // AuthAssignment
-                $this->createTable(Yii::app()->getModule('user')->tableAuthAssignment, array(
+                $this->createTable(Yii::app()->getModule('role')->tableAuthAssignment, array(
                     "itemname"=>"varchar(64) NOT NULL",
-                    "userid"=>"varchar(64) NOT NULL",
+                    "roleid"=>"varchar(64) NOT NULL",
                     "bizrule"=>"text",
                     "data"=>"text",
                 ), $this->MySqlOptions);
@@ -97,9 +97,9 @@ class m130526_162344_add_roles extends CDbMigration
 
     public function safeDown()
     {
-        $this->dropTable(Yii::app()->getModule('user')->tableAuthItem);
-        $this->dropTable(Yii::app()->getModule('user')->tableAuthItemChild);
-        $this->dropTable(Yii::app()->getModule('user')->tableAuthAssignment);
+        $this->dropTable(Yii::app()->getModule('role')->tableAuthItem);
+        $this->dropTable(Yii::app()->getModule('role')->tableAuthItemChild);
+        $this->dropTable(Yii::app()->getModule('role')->tableAuthAssignment);
     }
 
     public function dbType()
