@@ -33,7 +33,7 @@ class Role extends CActiveRecord
    */
   public function tableName()
   {
-    return Yii::app()->getModule('user')->tableAuthItem;
+    return Yii::app()->getModule('role')->tableAuthItem;
   }
 
   /**
