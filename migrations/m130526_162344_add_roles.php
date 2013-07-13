@@ -112,7 +112,7 @@ class m130526_162344_add_roles extends CDbMigration
         }
 
         // get user id of administrator
-        if (null === ($row = $this->_user->find('username = :username', array(':username', $this->_adminUsername)))) {
+        if (null === ($row = $this->_user->find('username = :username', array(':username'=>$this->_adminUsername)))) {
             echo "\n\nError: Unable to locate any user with username = '".$this->_adminUsername."'";
             return false;
         }
