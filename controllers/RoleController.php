@@ -22,7 +22,7 @@ class RoleController extends Controller
     {
         return array(
             array('allow', // administrator access
-                'actions'   =>array('index', 'create', 'update', 'delete'),
+                'actions'=>array('index', 'create', 'update', 'delete'),
                 'roles'=>array('admininistrator'),
             ),
             array('deny', // deny all users
