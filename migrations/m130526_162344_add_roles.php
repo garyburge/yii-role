@@ -112,11 +112,15 @@ class m130526_162344_add_roles extends CDbMigration
         }
 
         // get user id of administrator
-        if (null === ($row = $this->_user->find('username = :username', array(':username'=>$this->_adminUsername)))) {
+//        if (null === ($row = $this->_user->find('username = :username', array(':username'=>$this->_adminUsername)))) {
+//            echo "\n\nError: Unable to locate any user with username = '".$this->_adminUsername."'";
+//            return false;
+//        }
+        $sql = "SELECT id FROM ".Yii::app()->getModule('user')->tableUsers." WHERE username = :username ";
+        if (false === ($this->_adminUserId = Yii::app()->db->createCommand($sql)->queryScalar(array(':username'=>$this->_adminUsername)))) {
             echo "\n\nError: Unable to locate any user with username = '".$this->_adminUsername."'";
             return false;
         }
-        $this->_adminUserId = $row['id'];
 
         // create AuthItem row
         $this->insert(Yii::app()->getModule('role')->tableAuthItem, array(
