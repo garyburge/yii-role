@@ -49,7 +49,7 @@ class RoleModule extends CWebModule
     public function hasRole($itemname)
     {
         if (!self::$_roles) {
-            $sql = "SELECT itemname FROM ".self::$tableAuthAssignment." ".
+            $sql = "SELECT itemname FROM ".$this->tableAuthAssignment." ".
                    "WHERE userid = :userid ".
                    "ORDER by itemname ";
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':userid'=>Yii::app()->user->id));
