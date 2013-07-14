@@ -86,7 +86,7 @@ class AdminController extends Controller
             // copy form data to model
             $model->attributes = $_POST['User'];
             // set active key
-            $model->activeKey = Yii::app()->controller->module->encrypting(microtime() . $model->password);
+            $model->activeKey = Yii::app()->getModule('user')->encrypting(microtime() . $model->password);
             // copy profile data
             $profile->attributes = $_POST['Profile'];
             // set user id to zero for new user
