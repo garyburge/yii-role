@@ -55,9 +55,9 @@ class RoleModule extends CWebModule
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':userid'=>Yii::app()->user->id));
             if (null !== $rows) {
                 // unwrap into single dimension array
-                self::_$roles = array();
-                foreach ($rows => $row) {
-                    self::$roles[] = $row['itemname'];
+                $this->_roles = array();
+                foreach ($rows as $row) {
+                    $this->_roles[] = $row['itemname'];
                 }
             }
         }
