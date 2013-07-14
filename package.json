@@ -1,0 +1,15 @@
+{
+    "name": "yii-role",
+    "description": "A simplified user access control platform that assigns users to 'roles', or groups, the membership of which may be tested for each controller action.",
+    "author": "Gary Burge <garyburge@garyburge.com>",
+    "contributors": [
+        {
+            "name": "Gary Burge",
+            "email": "garyburge@garyburge.com"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/garyburge/yii-role.git"
+    },
+}

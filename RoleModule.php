@@ -48,7 +48,7 @@ class RoleModule extends CWebModule
      */
     public function hasRole($itemname)
     {
-        if (!self::$_roles) {
+        if (!$this->_roles) {
             $sql = "SELECT itemname FROM ".self::tableAuthAssignment." ".
                    "WHERE userid = :userid ".
                    "ORDER by itemname ";
@@ -62,7 +62,7 @@ class RoleModule extends CWebModule
             }
         }
 
-        return (!self::$_roles ? false : in_array($itemname, self::$_roles));
+        return (!$this->_roles ? false : in_array($itemname, self::$_roles));
     }
 
     /**
