@@ -94,7 +94,7 @@ class AdminController extends Controller
             // validate separately
             if ($model->validate() && $profile->validate()) {
                 // encrypt password
-                $model->password = Yii::app()->controller->module->encrypting($model->password);
+                $model->password = Yii::app()->getModule('user')->encrypting($model->password);
                 // save user
                 if ($model->save(false)) {
                     // copy new user id
@@ -152,8 +152,8 @@ class AdminController extends Controller
                 $old_password = User::model()->notsafe()->findByPk($model->id);
                 if ($old_password->password != $model->password) {
                     // encrypt new password and key
-                    $model->password = Yii::app()->controller->module->encrypting($model->password);
-                    $model->activeKey = Yii::app()->controller->module->encrypting(microtime() . $model->password);
+                    $model->password = Yii::app()->getModule('user')->encrypting($model->password);
+                    $model->activeKey = Yii::app()->getModule('user')->encrypting(microtime() . $model->password);
                 }
                 // save user data
                 $model->save();
