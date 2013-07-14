@@ -43,11 +43,17 @@ class RoleModule extends CWebModule
 
     /**
      * has role
-     * @param string $itemname is the itemname of the role assigned to this user
-     * @return boolean true if 'itemname' is assigned to this user
+     * @param mixed a string (single name) or array (multiple itemnames) of the itemnames of the roles assigned to this user
+     * @return boolean true if one of the itemnames is assigned to this user
      */
     public function hasRole($itemname)
     {
+        if (!is_array($itemname)) {
+            // convert to array
+            $itemname = array($itemname);
+        }
+
+        // if roles not already initialized
         if (!self::$_roles) {
             $sql = "SELECT itemname FROM ".$this->tableAuthAssignment." ".
                    "WHERE userid = :userid ".
@@ -62,7 +68,18 @@ class RoleModule extends CWebModule
             }
         }
 
-        return (!self::$_roles ? false : in_array($itemname, self::$_roles));
+        // initialize return value
+        $bHasRole = false;
+
+        // for each itemname, check for inclusion in roles
+        foreach($itemname as $name) {
+            if (in_array($name, self::$_roles)) {
+                $bHasRole = true;
+                break;
+            }
+        }
+
+        return $bHasRole;
     }
 
     /**
