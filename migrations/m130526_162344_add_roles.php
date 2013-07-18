@@ -46,8 +46,8 @@ class m130526_162344_add_roles extends CDbMigration
                     'child'=>'varchar(64) NOT NULL',
                 ), $this->MySqlOptions);
                 $this->createIndex('parent_child', Yii::app()->getModule('role')->tableAuthItemChild, 'parent,child', true);
-                $this->addForeignKey('parent', Yii::app()->getModule('role')->tableAuthItemChild, 'parent', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'CASCADE');
-                $this->addForeignKey('child', Yii::app()->getModule('role')->tableAuthItemChild, 'child', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'CASCADE');
+                //$this->addForeignKey('parent', Yii::app()->getModule('role')->tableAuthItem, 'parent', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'CASCADE');
+                //$this->addForeignKey('child', Yii::app()->getModule('role')->tableAuthItemChild, 'child', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'CASCADE');
 
                 // AuthAssignment
                 Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthAssignment)->execute();
