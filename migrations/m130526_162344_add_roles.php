@@ -29,7 +29,7 @@ class m130526_162344_add_roles extends CDbMigration
         switch ($this->dbType()) {
             case "mysql":
                 // AuthItem
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthItem)->execute();
+                //Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthItem)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthItem, array(
                     "name"=>"varchar(64) NOT NULL",
                     "type"=>"integer NOT NULL",
@@ -40,7 +40,7 @@ class m130526_162344_add_roles extends CDbMigration
                 $this->createIndex('name', Yii::app()->getModule('role')->tableAuthItem, 'name', true);
 
                 // AuthItemChild
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthItemChild)->execute();
+                //Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthItemChild)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthItemChild, array(
                     'parent'=>'varchar(64) NOT NULL',
                     'child'=>'varchar(64) NOT NULL',
@@ -50,7 +50,7 @@ class m130526_162344_add_roles extends CDbMigration
                 //$this->addForeignKey('child', Yii::app()->getModule('role')->tableAuthItemChild, 'child', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'CASCADE');
 
                 // AuthAssignment
-                Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthAssignment)->execute();
+                //Yii::app()->db->createCommand("DROP TABLE IF EXISTS " . Yii::app()->getModule('role')->tableAuthAssignment)->execute();
                 $this->createTable(Yii::app()->getModule('role')->tableAuthAssignment, array(
                     "itemname"=>"varchar(64) NOT NULL",
                     "userid"=>"integer(11) NOT NULL",
