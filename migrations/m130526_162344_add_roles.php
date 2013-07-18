@@ -59,9 +59,8 @@ class m130526_162344_add_roles extends CDbMigration
                 ), $this->MySqlOptions);
                 $this->createIndex('itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', false);
                 $this->createIndex('userid', Yii::app()->getModule('role')->tableAuthAssignment, 'userid', false);
-                print("add foreign key 'fk_itemname\n");
                 $this->addForeignKey('fk_itemname', Yii::app()->getModule('role')->tableAuthAssignment, 'itemname', Yii::app()->getModule('role')->tableAuthItem, 'name', 'CASCADE', 'CASCADE');
-                //$this->addForeignKey('user', Yii::app()->getModule('role')->tableAuthAssignment, 'userid', Yii::app()->getModule('user')->tableUsers, 'id', 'CASCADE', 'CASCADE');
+                $this->addForeignKey('fk_user', Yii::app()->getModule('role')->tableAuthAssignment, 'userid', Yii::app()->getModule('user')->tableUsers, 'id', 'CASCADE', 'CASCADE');
                 break;
 
             case "sqlite":
