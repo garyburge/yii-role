@@ -22,7 +22,7 @@ class RoleController extends Controller
     {
         return array(
             array('allow', // administrator access
-                  'actions'=>array('index', 'create', 'update', 'delete'),
+                  'actions'=>array('admin', 'create', 'update', 'delete'),
                   'roles'=>array('administrator'),
             ),
             array('deny', // deny all users
@@ -34,7 +34,7 @@ class RoleController extends Controller
     /**
      * Manages all models.
      */
-    public function actionIndex()
+    public function actionAdmin()
     {
         // create model initialized for searching
         $model = new Role('search');
@@ -47,7 +47,7 @@ class RoleController extends Controller
         }
 
         // render grid
-        $this->render('index', array(
+        $this->render('admin', array(
             'model'=>$model,
         ));
     }
@@ -123,27 +123,6 @@ class RoleController extends Controller
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
         }
     }
-
-//  /**
-//   * Lists all models.
-//   */
-//  public function actionIndex()
-//  {
-//    $dataProvider = new CActiveDataProvider('Role');
-//    $this->render('index', array(
-//      'dataProvider'=>$dataProvider,
-//    ));
-//  }
-//  /**
-//   * Displays a particular model.
-//   * @param integer $id the ID of the model to be displayed
-//   */
-//  public function actionView($id)
-//  {
-//    $this->render('view', array(
-//      'model'=>$this->loadModel($id),
-//    ));
-//  }
 
     /**
      * Returns the data model based on the primary key given in the GET variable.
